@@ -65,6 +65,13 @@ app.put('/campgrounds/:id', async (req, res) => {
     res.redirect(`/campgrounds/${campground._id}`);
 })
 
+// Delete route
+app.delete('/campgrounds/:id', async (req, res) => {
+    const { id } = req.params;
+    await Campground.findByIdAndDelete(id);
+    res.redirect('/campgrounds');
+})
+
 // Run server
 app.listen(port, () => {
     console.log(`Listening at port: ${port}`);
