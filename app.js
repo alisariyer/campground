@@ -18,6 +18,9 @@ main()
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// Setup middleware
+app.use(express.urlencoded({ extended: true }));
+
 // Setup routes
 app.get('/', (req, res) => {
     res.render('home');
@@ -28,6 +31,18 @@ app.get('/campgrounds', async (req, res) => {
     const campgrounds = await Campground.find({});
     res.render('campgrounds/index', { campgrounds });
 });
+
+// New Campground route
+app.get('/campgrounds/new', (req ,res) => {
+    res.render('campgrounds/new');
+})
+
+// New Campground post route
+app.post('/campgrounds', async (req, res) => {
+    const newCampground = new Campground(req.body.campground);
+    await newCampground.save();
+    res.redirect(`/Campgrounds/${newCampground._id}`);
+})
 
 // Specific campground route
 app.get('/campgrounds/:id', async (req, res) => {
