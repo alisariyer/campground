@@ -23,13 +23,6 @@ app.get('/', (req, res) => {
     res.render('home');
 })
 
-// Initial database
-app.get('/makecampground', async (req, res) => {
-    const camp = new Campground({ title: 'My backyard', description: 'Cheap camping!'});
-    await camp.save();
-    res.send(camp);
-})
-
 // Run server
 app.listen(port, () => {
     console.log(`Listening at port: ${port}`);
