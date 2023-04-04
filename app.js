@@ -21,6 +21,12 @@ app.set('views', path.join(__dirname, 'views'));
 // Setup routes
 app.get('/', (req, res) => {
     res.render('home');
+});
+
+// Campgrounds route
+app.get('/campgrounds', async (req, res) => {
+    const campgrounds = await Campground.find({});
+    res.render('campgrounds/index', { campgrounds });
 })
 
 // Run server
