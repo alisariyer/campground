@@ -1,5 +1,5 @@
 # Campground :ocean:
-A full-stack campground app [express.js, mongo]
+A full-stack web application [express.js, mongo]
 
 ## Used frameworks and libraries :stars:
 - Express.js
