@@ -1,14 +1,24 @@
-<%- include('../layouts/head.ejs', { title: 'Show'}) %>
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head.ejs', { title: 'Show' }) %>
 
-<body>
-    <h1><%= campground.title %></h1>
-    <h2><%= campground.location %></h2>
-    <footer>
-        <a href="/campgrounds/<%= campground._id %>/edit">Edit Campground</a>
-        <form action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST">
-            <button>Delete campground</button>
-        </form>
-        <a href="/campgrounds">All Campgrounds</a>
-    </footer>
-</body>
+    <body>
+        <%- include('../partials/navbar.ejs') %>
+        <div class="container mt-5">
+            <h1>
+                <%= campground.title %>
+            </h1>
+            <h2>
+                <%= campground.location %>
+            </h2>
+            <footer>
+                <a href="/campgrounds/<%= campground._id %>/edit">Edit Campground</a>
+                <form action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST">
+                    <button>Delete campground</button>
+                </form>
+                <a href="/campgrounds">All Campgrounds</a>
+            </footer>
+        </div>
+    </body>
+
 </html>

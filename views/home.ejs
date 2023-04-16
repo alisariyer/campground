@@ -1,6 +1,12 @@
-<%- include('./layouts/head.ejs', { title: 'Homepage'}) %>
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partials/head.ejs', { title: 'Homepage' }) %>
 
-<body>
-    <h1>Welcome to Yelpcamp</h1>
-</body>
+    <body>
+        <%- include('./partials/navbar.ejs') %>
+        <main class="container mt-5">
+            <h1>Welcome to Yelpcamp</h1>
+        </main>
+    </body>
+
 </html>
