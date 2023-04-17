@@ -2,7 +2,7 @@
 <html lang="en">
 <%- include('../partials/head.ejs', { title: 'Campgrounds' }) %>
 
-    <body>
+    <body class="d-flex flex-column min-vh-100">
         <%- include('../partials/navbar.ejs') %>
         <main class="container mt-5">
             <h1>All Campgrounds</h1>
@@ -17,6 +17,7 @@
                     <% } %>
             </ul>
         </main>
+        <%- include('../partials/footer.ejs') %>
     </body>
 
 </html>

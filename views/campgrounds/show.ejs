@@ -2,7 +2,7 @@
 <html lang="en">
 <%- include('../partials/head.ejs', { title: 'Show' }) %>
 
-    <body>
+    <body class="d-flex flex-column min-vh-100">
         <%- include('../partials/navbar.ejs') %>
         <div class="container mt-5">
             <h1>
@@ -11,6 +11,10 @@
             <h2>
                 <%= campground.location %>
             </h2>
+            <figure>
+                <img src="<%= campground.image %>" alt="Campground image">
+                <figcaption><%= campground.description %></figcaption>
+            </figure>
             <footer>
                 <a href="/campgrounds/<%= campground._id %>/edit">Edit Campground</a>
                 <form action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST">
@@ -19,6 +23,7 @@
                 <a href="/campgrounds">All Campgrounds</a>
             </footer>
         </div>
+        <%- include('../partials/footer.ejs') %>
     </body>
 
 </html>
