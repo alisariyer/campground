@@ -67,10 +67,14 @@ app.get('/campgrounds/new', (req ,res) => {
 })
 
 // New Campground post route
-app.post('/campgrounds', async (req, res) => {
-    const newCampground = new Campground(req.body.campground);
-    await newCampground.save();
-    res.redirect(`/Campgrounds/${newCampground._id}`);
+app.post('/campgrounds', async (req, res, next) => {
+    try {
+        const newCampground = new Campground(req.body.campground);
+        await newCampground.save();
+        res.redirect(`/Campgrounds/${newCampground._id}`);
+    } catch (e) {
+        next(e);
+    }
 })
 
 // Specific campground route
