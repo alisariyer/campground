@@ -4,9 +4,11 @@ const path = require("path");
 const port = 3000;
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
+const Joi = require("joi");
 const Campground = require("./models/campground");
-const ExpressError = require('./utils/ExpressError');
+const ExpressError = require("./utils/ExpressError");
 const catchAsync = require("./utils/catchAsync");
+const campground = require("./models/campground");
 
 const main = async function () {
   await mongoose.connect("mongodb://127.0.0.1:27017/yelpcamp");
@@ -73,7 +75,19 @@ app.get("/campgrounds/new", (req, res) => {
 app.post(
   "/campgrounds",
   catchAsync(async (req, res, next) => {
-    if (!req.body.campground) throw new ExpressError('Invalid Campground Data!', 400);
+    // if (!req.body.campground) throw new ExpressError('Invalid Campground Data!', 400);
+    const campgroundSchema = Joi.object({
+      campground: Joi.object({
+        title: Joi.string().required(),
+        price: Joi.number().required().min(0),
+      }).required(),
+    });
+    const { error } = campgroundSchema.validate(req.body);
+    if (error) {
+        const message = error.details.map(el => el.message).join('\n');
+        console.log(message);
+      throw new ExpressError(message, 400);
+    }
     const newCampground = new Campground(req.body.campground);
     await newCampground.save();
     res.redirect(`/Campgrounds/${newCampground._id}`);
@@ -122,9 +136,9 @@ app.delete(
   })
 );
 
-app.all('*', (req, res, next) => {
-    next(new ExpressError('Page not found!', 404));
-})
+app.all("*", (req, res, next) => {
+  next(new ExpressError("Page not found!", 404));
+});
 
 app.use((err, req, res, next) => {
   // const message = `
@@ -134,8 +148,9 @@ app.use((err, req, res, next) => {
   // console.log(message);
   // next(err);
   // res.status(500).send('We got an error!');
-  const { statusCode = 500, message = "Some error occured!!!" } = err;
-  res.status(statusCode).send(message);
+  const { statusCode = 500 } = err;
+  if (!err.message) err.message = "Something went wrong!";
+  res.status(statusCode).render("campgrounds/error", { err });
 });
 
 // Run server
