@@ -4,12 +4,11 @@ const path = require("path");
 const port = 3000;
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
-const { campgroundSchema } = require('./campgroundSchema');
+const { campgroundValidationSchema, reviewValidationSchema } = require('./utils/validationSchema');
 const Campground = require("./models/campground");
 const Review = require("./models/review");
 const ExpressError = require("./utils/ExpressError");
 const catchAsync = require("./utils/catchAsync");
-const campground = require("./models/campground");
 
 const main = async function () {
   await mongoose.connect("mongodb://127.0.0.1:27017/yelpcamp");
@@ -29,17 +28,30 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
 const validateCampground = (req, res, next) => {
-  const { error } = campgroundSchema.validate(req.body);
+  const { error } = campgroundValidationSchema.validate(req.body);
   if (error) {
     const message = error.details.map((el) => el.message).join("\n");
     throw new ExpressError(message, 400);
+  } else {
+    return next();
   }
 };
+
+const validateReview = (req, res, next) => {
+  const { error } = reviewValidationSchema.validate(req.body);
+  if (error) {
+    const msg = error.details.map(detail => detail.message).join(', ');
+    throw new ExpressError(msg, 400);
+  } else {
+    return next();
+  }
+
+}
 
 const verifyPassword = (req, res, next) => {
   const { password } = req.query;
   if (password === "super") {
-    next();
+    return next();
   } else {
     // res.send('You cannot get this without password');
     // res.status(401);
@@ -126,7 +138,7 @@ app.get(
 app.put(
   "/campgrounds/:id",
   validateCampground,
-  catchAsync(async (req, res) => {
+  catchAsync(async (req, res, next) => {
     const { id } = req.params;
     const campground = await Campground.findByIdAndUpdate(
       id,
@@ -147,18 +159,18 @@ app.delete(
   })
 );
 
-app.post('/campgrounds/:id/reviews', catchAsync(async (req, res) => {
+app.post('/campgrounds/:id/reviews', validateReview, catchAsync(async (req, res) => {
   const { body, rating } = req.body.review;
   const campground = await Campground.findById(req.params.id);
   const review = new Review({ body, rating });
   campground.reviews.push(review);
   await review.save();
   await campground.save();
-  res.redirect(`/campground/${campground._id}`);
+  res.redirect(`/campgrounds/${campground._id}`);
 }));
 
 app.all("*", (req, res, next) => {
-  next(new ExpressError("Page not found!", 404));
+  return next(new ExpressError("Page not found!", 404));
 });
 
 app.use((err, req, res, next) => {
