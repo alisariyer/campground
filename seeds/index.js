@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Campground = require('../models/campground');
+const Review = require('../models/review');
 const cities = require('./cities');
 const { descriptors, places } = require('./seedHelpers');
 
@@ -17,6 +18,7 @@ const sample = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 const seedDB = async () => {
     await Campground.deleteMany({});
+    await Review.deleteMany({});
     // Test db
     // const c = new Campground({ title: 'Test camp'});
     // await c.save();
