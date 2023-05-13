@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Campground = require("../models/campground");
-const { campgroundValidationSchema } = require('../utils/validationSchema');
+const { campgroundValidationSchema } = require("../utils/validationSchema");
 const ExpressError = require("../utils/ExpressError");
 const catchAsync = require("../utils/catchAsync");
 
@@ -49,7 +49,7 @@ router.post(
     // }
     const newCampground = new Campground(req.body.campground);
     await newCampground.save();
-    req.flash('success', 'Successfully made a new campground!');
+    req.flash("success", "Successfully made a new campground!");
     res.redirect(`/Campgrounds/${newCampground._id}`);
   })
 );
@@ -84,6 +84,7 @@ router.put(
       { ...req.body.campground },
       { new: true }
     );
+    req.flash("success", "Successfully updated campground!");
     res.redirect(`/campgrounds/${campground._id}`);
   })
 );
@@ -94,6 +95,7 @@ router.delete(
   catchAsync(async (req, res) => {
     const { id } = req.params;
     await Campground.findByIdAndDelete(id);
+    req.flash("success", "Successfully deleted campground!");
     res.redirect("/campgrounds");
   })
 );
