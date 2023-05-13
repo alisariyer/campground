@@ -4,6 +4,7 @@ const path = require("path");
 const PORT = 3000;
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
+const session = require('express-session');
 const ExpressError = require("./utils/ExpressError");
 
 const campgroundRoute = require('./routes/campground');
@@ -25,6 +26,21 @@ app.set("views", path.join(__dirname, "views"));
 // Setup middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+app.use(express.static(path.join(__dirname, 'public')));
+
+const sessionConfig = {
+  secret: 'thisisasimplesecret',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    expires: Date.now() + (1000 * 60 * 60 * 24 * 7),
+    // 1000 ms > 60 seconds > 60 minutes > 24 hours > 7 days
+    maxAge: 1000 * 60 * 60 * 24 * 7
+  }
+};
+
+app.use(session(sessionConfig));
 
 // Setup routes
 app.get("/", (req, res) => {
