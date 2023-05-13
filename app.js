@@ -5,6 +5,7 @@ const PORT = 3000;
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const session = require('express-session');
+const flash = require('connect-flash');
 const ExpressError = require("./utils/ExpressError");
 
 const campgroundRoute = require('./routes/campground');
@@ -41,6 +42,12 @@ const sessionConfig = {
 };
 
 app.use(session(sessionConfig));
+app.use(flash());
+
+app.use((req, res, next) => {
+  res.locals.success = req.flash('success');
+  next();
+})
 
 // Setup routes
 app.get("/", (req, res) => {
