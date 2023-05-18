@@ -10,9 +10,9 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const ExpressError = require("./utils/ExpressError");
 const User = require('./models/user');
-
-const campgroundRoute = require('./routes/campground');
-const reviewRoute = require('./routes/review');
+const campgroundRoute = require('./routes/campgrounds');
+const reviewRoute = require('./routes/reviews');
+const userRoute = require('./routes/users');
 
 const main = async function () {
   await mongoose.connect("mongodb://127.0.0.1:27017/yelpcamp");
@@ -70,6 +70,7 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 
+app.use('/', userRoute);
 app.use('/campgrounds', campgroundRoute);
 app.use('/campgrounds/:id/reviews', reviewRoute);
 
