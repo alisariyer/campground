@@ -6,13 +6,16 @@ router.get('/register', (req, res) => {
     res.render('users/register');
 });
 
-router.post('/register', async (req, res) => {
+router.post('/register', async (req, res, next) => {
     try{
         const { username, email, password } = req.body;
         const user = new User({ username, email });
-        await User.register(user, password);
-        req.flash('success', 'Welcome to Yelp Camp!');
-        res.redirect(302, '/campgrounds');
+        const registeredUser = await User.register(user, password);
+        req.login(registeredUser, (err) => {
+            if (err) next(err);
+            req.flash('success', 'Welcome to Yelp Camp!');
+            res.redirect(302, '/campgrounds');
+        })
     } catch (e) {
         req.flash('error', e.message);
         res.redirect(302, '/register');
