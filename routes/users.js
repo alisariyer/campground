@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const passport = require('passport');
 const User = require('../models/user');
+const { storeReturnTo } = require('../middleware');
 
 router.get('/register', (req, res) => {
     res.render('users/register');
@@ -26,9 +27,11 @@ router.get('/login', (req, res) => {
     res.render('users/login');
 });
 
-router.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login'}), (req, res) => {
+router.post('/login', storeReturnTo, passport.authenticate('local', { failureFlash: true, failureRedirect: '/login'}), (req, res) => {
     req.flash('success', 'Welcome back!');
-    res.redirect(302, '/campgrounds');
+    const redirectUrl = res.locals.returnTo || '/campgrounds';
+    // delete req.session.returnTo;
+    res.redirect(302, redirectUrl);
 });
 
 router.get('/logout', (req, res, next) => {
