@@ -30,7 +30,8 @@ const seedDB = async () => {
             title: `${sample(descriptors)} ${sample(places)}`,
             image: 'https://picsum.photos/200/300',
             description: `Lorem ipsum image`,
-            price
+            price,
+            author: '6467dec56fa8f8ca89bbd501'
             })
         await camp.save();
     }
