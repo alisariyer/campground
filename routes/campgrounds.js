@@ -4,6 +4,7 @@ const Campground = require("../models/campground");
 const { campgroundValidationSchema } = require("../utils/validationSchema");
 const ExpressError = require("../utils/ExpressError");
 const catchAsync = require("../utils/catchAsync");
+const { isLoggedIn } = require('../isLoggedIn');
 
 const validateCampground = (req, res, next) => {
   const { error } = campgroundValidationSchema.validate(req.body);
@@ -25,7 +26,7 @@ router.get(
 );
 
 // New Campground route
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
   res.render("campgrounds/new");
 });
 
