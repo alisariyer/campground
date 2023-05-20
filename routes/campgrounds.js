@@ -47,7 +47,6 @@ router.get(
       })
       // Then populate author for campground
       .populate("author");
-      console.log(campground);
     if (!campground) {
       req.flash("error", "Cannot find that campground!");
       return res.redirect("/campgrounds");
