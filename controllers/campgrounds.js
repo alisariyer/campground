@@ -53,9 +53,10 @@ module.exports.putId = async (req, res, next) => {
     req.flash("error", "Cannot find that campground!");
     return res.redirect("/campgrounds");
   }
+  images = req.files.map(file => ({ url: file.path, filename: file.filename }))
   await Campground.findByIdAndUpdate(
     id,
-    { ...req.body.campground },
+    { ...req.body.campground, images },
     { new: true }
   );
   req.flash("success", "Successfully updated campground!");

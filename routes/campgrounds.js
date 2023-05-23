@@ -23,7 +23,7 @@ router
   // Specific campground route
   .get(isLoggedIn, catchAsync(campgrounds.getId))
   // Edit route put
-  .put(isLoggedIn, isAuthor, validateCampground, catchAsync(campgrounds.putId))
+  .put(isLoggedIn, isAuthor, upload.array('image'), validateCampground, catchAsync(campgrounds.putId))
   // Delete route
   .delete(isLoggedIn, isAuthor, catchAsync(campgrounds.deleteId));
 

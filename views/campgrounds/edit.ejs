@@ -8,7 +8,7 @@
             <div class="row">
                 <h1 class="text-center">Edit Campground</h1>
                 <div class="col-6 offset-3">
-                    <form action="/campgrounds/<%= campground._id %>?_method=PUT" method="POST" class="needs-validation" novalidate>
+                    <form action="/campgrounds/<%= campground._id %>?_method=PUT" method="POST" class="needs-validation" novalidate enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="title" class="form-label">Title</label>
                             <input type="text" class="form-control" name="campground[title]" id="title" value="<%= campground.title %>" required>
@@ -20,9 +20,10 @@
                             <div class="valid-feedback">Looks good</div>
                         </div>
                         <div class="mb-3">
-                            <label for="image" class="form-label">Image Url</label>
-                            <input type="text" class="form-control" name="campground[image]" id="image" value="<%= campground.image %>" required>
+                            <label for="file-upload" class="form-label">Choose image(s)</label>
+                            <input type="file" class="form-control" id="file-upload" name="image" aria-label="Upload" multiple required>
                             <div class="invalid-feedback">Something wrong!</div>
+                            <div id="file-names"></div>
                         </div>
                         <div class="mb-3">
                             <label for="price" class="form-label">Campground Price</label>
@@ -48,6 +49,7 @@
             </div>
         </div>
         <%- include('../partials/footer.ejs') %>
+        <script src="/js/fileNames.js"></script>
         <script src="/js/validateForm.js"></script>
     </body>
 
