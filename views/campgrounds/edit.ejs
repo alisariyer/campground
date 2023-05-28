@@ -29,10 +29,10 @@
                             <% campground.images.forEach((image, index) => { %> 
                                 <div class="mb-1 d-flex align-items-center">
                                     <div>
-                                        <label for="image-<%=index%>">Select</label>
+                                        <label for="image-<%=index%>">Delete</label>
                                         <input type="checkbox" id="image-<%=index%>" name="deleteImages[]" value="<%= image.filename %>">
                                     </div>
-                                    <img src="<%= image.url %>" id="image<%=index%>" alt="" class="img-thumbnail rounded ms-3" width="200">
+                                    <img src="<%= image.thumbnail %>" id="image<%=index%>" alt="" class="img-thumbnail rounded ms-3">
                                 </div>
                             <% }) %>
                         </div>
