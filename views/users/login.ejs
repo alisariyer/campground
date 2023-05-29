@@ -4,24 +4,29 @@
 
     <body class="d-flex flex-column min-vh-100">
         <%- include('../partials/navbar.ejs') %>
-        <div class="container mt-5">
+        <div class="container mt-2">
             <div class="row">
-                <h1 class="text-center">Login</h1>
-                <div class="col-6 offset-3">
-                    <%- include('../partials/flash') %>
-                    <form action="/login" method="POST" class="needs-validation" novalidate>
-                        <div class="mb-3">
-                            <label for="username" class="form-text">Username</label>
-                            <input type="text" name="username" id="username" class="form-control" placeholder="username" required>
-                            <div class="valid-feedback">Looks good</div>
+                <div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
+                    <div class="card shadow">
+                        <img src="https://images.unsplash.com/photo-1470246973918-29a93221c455?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80" class="card-img-top" alt="camp image" height="250" style="object-fit: cover; object-position: bottom;">
+                        <div class="card-body">
+                            <h5 class="card-title">Login</h5>
+                            <%- include('../partials/flash') %>
+                            <form action="/login" method="POST" class="needs-validation" novalidate>
+                                <div class="mb-3">
+                                    <label for="username" class="form-text">Username</label>
+                                    <input type="text" name="username" id="username" class="form-control" placeholder="username" autofocus required>
+                                    <div class="valid-feedback">Looks good</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password" class="form-text">Password</label>
+                                    <input type="password" name="password" id="password" class="form-control" placeholder="password" required>
+                                    <div class="valid-feedback">Looks good</div>
+                                </div>
+                                <button class="btn btn-primary">Login</button>
+                            </form>
                         </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-text">Password</label>
-                            <input type="password" name="password" id="password" class="form-control" placeholder="password" required>
-                            <div class="valid-feedback">Looks good</div>
-                        </div>
-                        <button class="btn btn-primary">Login</button>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
