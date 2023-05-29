@@ -9,6 +9,7 @@
                     <div class="col-md-6">
                         <%- include('../partials/flash') %>
                             <div class="card">
+                                <div id='map' style='width: 100%; height: 300px;'></div>
 
                                 <div id="campgroundCarousel" class="carousel slide" data-bs-ride="carousel">
                                     <div class="carousel-inner">
@@ -41,7 +42,7 @@
                                 </div>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item text-muted">
-                                        <%= campground.location %>
+                                        <%= campground.geometry %>
                                     </li>
                                     <li class="list-group-item text-muted">
                                         Submitted by <%= campground.author.username %>
@@ -121,7 +122,12 @@
 
             </div>
             <%- include('../partials/footer.ejs') %>
-                <script src="/js/validateForm.js"></script>
+            <script src="/js/validateForm.js"></script>
+            <script>
+                const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
+                const geometry = <%- JSON.stringify(campground.geometry) %>;
+            </script>
+            <script src="/js/showPageMap.js"></script>
     </body>
 
 </html>

@@ -18,13 +18,13 @@ module.exports.postIndex = async (req, res, next) => {
     query: req.body.campground.location,
     limit: 1
   }).send();
-  res.send(response.body.features[0].geometry.coordinates);
-  // const campground = new Campground(req.body.campground);
-  // campground.images = req.files.map(file => ({ url: file.path, filename: file.filename }));
-  // campground.author = req.user._id;
-  // await campground.save();
-  // req.flash("success", "Successfully made a new campground!");
-  // res.redirect(`/Campgrounds/${campground._id}`);
+  const campground = new Campground(req.body.campground);
+  campground.geometry = response.body.features[0].geometry;
+  campground.images = req.files.map(file => ({ url: file.path, filename: file.filename }));
+  campground.author = req.user._id;
+  await campground.save();
+  req.flash("success", "Successfully made a new campground!");
+  res.redirect(`/Campgrounds/${campground._id}`);
 };
 
 module.exports.getId = async (req, res) => {
