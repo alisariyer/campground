@@ -4,6 +4,7 @@
 
     <body class="d-flex flex-column min-vh-100">
         <%- include('../partials/navbar.ejs') %>
+        <div id="map" style="height: 500px; width: 100%;"></div>
         <main class="container mt-5">
             <h1>All Campgrounds</h1>
             <%- include('../partials/flash') %>
@@ -31,6 +32,11 @@
             <% } %>
         </main>
         <%- include('../partials/footer.ejs') %>
+        <script>
+            const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
+            const campgrounds = { features: <%- JSON.stringify(campgrounds) %> };
+        </script>
+        <script src="/js/clusterMap.js"></script>
     </body>
 
 </html>
