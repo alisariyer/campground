@@ -4,7 +4,6 @@ if (process.env.NODE_ENV !== "production") {
 const express = require("express");
 const app = express();
 const path = require("path");
-const PORT = 3000;
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const session = require("express-session");
@@ -18,9 +17,13 @@ const reviewRoute = require("./routes/reviews");
 const userRoute = require("./routes/users");
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
+const MongoStore = require("connect-mongo");
+
+const mongoUrl =
+  process.env.MONGODB_URL || "mongodb://127.0.0.1:27017/yelpcamp";
 
 const main = async function () {
-  await mongoose.connect("mongodb://127.0.0.1:27017/yelpcamp");
+  await mongoose.connect(mongoUrl);
 };
 
 // Connect to the database
@@ -42,10 +45,21 @@ app.use(
   })
 );
 
+  const secret = process.env.SESSION_SECRET || "thisisasimplesecret";
+
+const mongoStoreOptions = MongoStore.create({
+  mongoUrl,
+  crypto: {
+    secret,
+  },
+  touchAfter: 24 * 60 * 60, // Regenerate after one day
+});
+
 const sessionConfig = {
+  store: mongoStoreOptions,
   // override connect.sid name for more security
   name: "loc",
-  secret: "thisisasimplesecret",
+  secret,
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -80,7 +94,7 @@ const styleSrcUrls = [
   "https://api.tiles.mapbox.com/",
   "https://fonts.googleapis.com/",
   "https://use.fontawesome.com/",
-  "https://cdn.jsdelivr.net"
+  "https://cdn.jsdelivr.net",
 ];
 const connectSrcUrls = [
   "https://api.mapbox.com/",
@@ -91,22 +105,22 @@ const connectSrcUrls = [
 const fontSrcUrls = [];
 app.use(
   helmet.contentSecurityPolicy({
-      directives: {
-          defaultSrc: [],
-          connectSrc: ["'self'", ...connectSrcUrls],
-          scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
-          styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
-          workerSrc: ["'self'", "blob:"],
-          objectSrc: [],
-          imgSrc: [
-              "'self'",
-              "blob:",
-              "data:",
-              "https://res.cloudinary.com/diswc9ddq/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT! 
-              "https://images.unsplash.com/",
-          ],
-          fontSrc: ["'self'", ...fontSrcUrls],
-      },
+    directives: {
+      defaultSrc: [],
+      connectSrc: ["'self'", ...connectSrcUrls],
+      scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+      styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+      workerSrc: ["'self'", "blob:"],
+      objectSrc: [],
+      imgSrc: [
+        "'self'",
+        "blob:",
+        "data:",
+        "https://res.cloudinary.com/diswc9ddq/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT!
+        "https://images.unsplash.com/",
+      ],
+      fontSrc: ["'self'", ...fontSrcUrls],
+    },
   })
 );
 
@@ -148,6 +162,7 @@ app.use((err, req, res, next) => {
   res.status(statusCode).render("campgrounds/error", { err });
 });
 
+const PORT = process.env.PORT || 3000;
 // Run server
 app.listen(PORT, () => {
   console.log(`Listening at port: ${PORT}`);
